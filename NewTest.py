@@ -219,6 +219,11 @@ for message in st.session_state.messages:  # Display the prior chat messages
     with st.chat_message(message["role"]):
         st.write(message["content"])
 
+def remove_bold(text):
+    bold_start = '\\033[1m'
+    bold_end = '\\033[0m'
+    return text.replace(bold_start, '').replace(bold_end, '')
+
 # If last message is not from assistant, generate a new response
 if st.session_state.messages[-1]["role"] != "assistant":
     with st.chat_message("assistant"):
@@ -228,7 +233,9 @@ if st.session_state.messages[-1]["role"] != "assistant":
             # response = st.session_state.chat_engine.chat(prompt)
             query_engine = index.as_query_engine()
             print("Step 2")
+            prompt = "\n".join([f"{item['role']}: {item['content']}" for item in st.session_state.messages[-5:]])
             res = query_engine.query(prompt)
-            st.write(res.response)
-            message = {"role": "assistant", "content": res.response}
+            response = remove_bold(res.response)
+            st.write(response)
+            message = {"role": "assistant", "content": response}
             st.session_state.messages.append(message)  # Add response to message history
