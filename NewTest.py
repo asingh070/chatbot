@@ -228,7 +228,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
             # response = st.session_state.chat_engine.chat(prompt)
             query_engine = index.as_query_engine()
             print("Step 2")
-            prompt = "\n".join([f"{item['role']}: {item['content']}" for item in st.session_state.messages[-5:]])
+            # prompt = "\n".join([f"{item['role']}: {item['content']}" for item in st.session_state.messages[-5:]])
             res = query_engine.query(prompt)
             st.write(res.response)
             message = {"role": "assistant", "content": res.response}
